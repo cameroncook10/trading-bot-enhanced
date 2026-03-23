@@ -4,21 +4,12 @@
   "installCommand": "npm install",
   "framework": "vite",
   "outputDirectory": "dist",
-  "projectSettings": {
-    "sourceFilesOutsideRootDirectory": false
-  },
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/index.html"
     }
   ],
-  "env": {
-    "VITE_API_BASE_URL": "@api_base_url",
-    "VITE_WS_URL": "@ws_url",
-    "VITE_ENVIRONMENT": "@environment"
-  },
-  "envPrefix": "VITE_",
   "git": {
     "deploymentEnabled": true
   }
