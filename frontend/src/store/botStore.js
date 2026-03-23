@@ -1,6 +1,19 @@
 import { create } from 'zustand';
 import { formatDistanceToNow } from 'date-fns';
 
+/**
+ * Bot Store
+ * 
+ * Central state management for the trading bot frontend
+ * Manages: bot status, portfolio, trades, signals, positions, activities
+ * 
+ * Key features:
+ * - Error handling in all operations
+ * - Validation before state mutations
+ * - Activity logging for important changes
+ * - Support for CRUD operations on positions and trades
+ */
+
 export const useBotStore = create((set, get) => ({
   // Bot Status
   botStatus: 'online', // 'online', 'offline', 'paused'

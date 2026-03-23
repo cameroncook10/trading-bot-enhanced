@@ -1,4 +1,15 @@
 import axios from 'axios';
+import { apiLogger } from './apiLogger.js';
+
+/**
+ * API Service Configuration & Setup
+ * 
+ * Provides centralized API client with:
+ * - Error handling and response validation
+ * - Request/response logging for debugging
+ * - Timeout configuration
+ * - Consistent error format
+ */
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -11,19 +22,57 @@ const apiClient = axios.create({
   }
 });
 
-// Response interceptor for error handling
-apiClient.interceptors.response.use(
-  (response) => response,
+/**
+ * Request interceptor: Log outgoing requests
+ */
+apiClient.interceptors.request.use(
+  (config) => {
+    // Log request with optional data
+    apiLogger.logRequest(config.method.toUpperCase(), config.url, config.data);
+    return config;
+  },
   (error) => {
+    console.error('Request setup error:', error);
+    return Promise.reject(error);
+  }
+);
+
+/**
+ * Response interceptor: Log responses and handle errors
+ */
+apiClient.interceptors.response.use(
+  (response) => {
+    // Log successful response
+    const startTime = performance.now();
+    apiLogger.logSuccess(
+      `${response.config.method.toUpperCase()}-${Date.now()}`,
+      response.status,
+      response.data,
+      performance.now() - startTime
+    );
+    return response;
+  },
+  (error) => {
+    // Log error response
     const errorMessage = error.response?.data?.error || error.message || 'Unknown error';
-    console.error('API Error:', {
-      status: error.response?.status,
-      message: errorMessage,
-      path: error.config?.url
-    });
+    apiLogger.logError(
+      `${error.config?.method.toUpperCase()}-${Date.now()}`,
+      new Error(errorMessage),
+      0
+    );
+
+    if (process.env.NODE_ENV === 'development') {
+      console.error('API Error:', {
+        status: error.response?.status,
+        message: errorMessage,
+        path: error.config?.url
+      });
+    }
+
     return Promise.reject({
       status: error.response?.status || 500,
-      message: errorMessage
+      message: errorMessage,
+      timestamp: new Date().toISOString()
     });
   }
 );
