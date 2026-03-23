@@ -40,70 +40,77 @@ export default function Navigation({ sidebarOpen, setSidebarOpen }: NavigationPr
     <>
       {/* Desktop Sidebar */}
       <nav className={`
-        hidden lg:flex lg:flex-col w-64 bg-dark-800 border-r border-dark-700
-        overflow-y-auto transition-all duration-300
+        hidden lg:flex lg:flex-col w-64 bg-dark-950/95 border-r border-dark-800/50
+        overflow-y-auto transition-all duration-300 relative z-20
       `}>
         {/* Logo */}
-        <div className="p-6 border-b border-dark-700">
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-accent rounded-lg flex items-center justify-center font-bold text-white">
-              ⚡
+        <div className="p-6 border-b border-dark-800/50">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-gradient-accent rounded-xl flex items-center justify-center font-bold text-white shadow-glow-brand relative overflow-hidden group">
+              <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:animate-[slideIn_0.5s_ease-out_forwards] skew-x-12" />
+              <span className="text-xl">⚡</span>
             </div>
             <div>
-              <h1 className="font-bold text-lg">TradeBot</h1>
-              <p className="text-xs text-dark-400">AI Trading Dashboard</p>
+              <h1 className="font-bold text-xl tracking-tight glow-text">TradeBot</h1>
+              <p className="text-xs text-brand-400 font-medium uppercase tracking-widest mt-0.5">AI Engine</p>
             </div>
           </div>
         </div>
 
         {/* Navigation Items */}
-        <div className="flex-1 px-4 py-6 space-y-2">
+        <div className="flex-1 px-4 py-6 space-y-1.5">
           {navItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
               className={`
-                flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200
+                flex items-center space-x-3 px-4 py-3.5 rounded-xl transition-all duration-300 relative overflow-hidden group
                 ${
                   isActive(item.path)
-                    ? 'bg-brand-600/20 text-brand-400 border border-brand-600/30'
-                    : 'text-dark-300 hover:bg-dark-700/50 hover:text-dark-50'
+                    ? 'bg-brand-500/10 text-brand-300'
+                    : 'text-dark-400 hover:bg-dark-800/50 hover:text-dark-50'
                 }
               `}
             >
-              <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={getIcon(item.icon)} />
+              {isActive(item.path) && (
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-accent rounded-r-md shadow-[0_0_10px_rgba(20,184,166,0.8)]" />
+              )}
+              <svg className={`w-5 h-5 flex-shrink-0 transition-transform duration-300 ${isActive(item.path) ? 'scale-110' : 'group-hover:scale-110'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={isActive(item.path) ? 2.5 : 2} d={getIcon(item.icon)} />
               </svg>
-              <span className="text-sm font-medium">{item.name}</span>
+              <span className={`text-sm tracking-wide ${isActive(item.path) ? 'font-bold' : 'font-medium'}`}>{item.name}</span>
             </Link>
           ))}
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-dark-700">
-          <div className="bg-dark-700/50 rounded-lg p-3 text-center">
-            <p className="text-xs text-dark-400">Last updated</p>
-            <p className="text-xs font-mono text-dark-300">2 seconds ago</p>
+        <div className="p-4 border-t border-dark-800/50">
+          <div className="bg-dark-900/80 rounded-xl p-4 text-center border border-dark-800/50 hover:border-dark-700 transition-colors cursor-pointer group">
+            <p className="text-xs text-dark-500 font-medium uppercase tracking-wider mb-1">Status</p>
+            <div className="flex items-center justify-center space-x-2">
+              <div className="w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_8px_rgba(20,184,166,0.8)] group-hover:scale-125 transition-transform" />
+              <p className="text-xs font-mono text-brand-400 font-semibold">SYNCED</p>
+            </div>
           </div>
         </div>
       </nav>
 
       {/* Mobile Sidebar */}
       {sidebarOpen && (
-        <nav className="fixed inset-0 z-50 lg:hidden bg-dark-800">
-          <div className="p-6 border-b border-dark-700 flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-accent rounded-lg flex items-center justify-center font-bold text-white">
-                ⚡
+        <nav className="fixed inset-0 z-50 lg:hidden bg-dark-950 flex flex-col">
+          <div className="p-6 border-b border-dark-800/50 flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gradient-accent rounded-xl flex items-center justify-center font-bold text-white shadow-glow-brand">
+                <span className="text-xl">⚡</span>
               </div>
               <div>
-                <h1 className="font-bold text-lg">TradeBot</h1>
-                <p className="text-xs text-dark-400">AI Trading</p>
+                <h1 className="font-bold text-xl tracking-tight glow-text">TradeBot</h1>
+                <p className="text-xs text-brand-400 font-medium uppercase tracking-widest mt-0.5">AI Engine</p>
               </div>
             </div>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="p-2 hover:bg-dark-700 rounded-lg"
+              className="p-3 hover:bg-dark-800 rounded-xl transition-colors text-dark-400 hover:text-white"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -111,25 +118,28 @@ export default function Navigation({ sidebarOpen, setSidebarOpen }: NavigationPr
             </button>
           </div>
 
-          <div className="px-4 py-6 space-y-2">
+          <div className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
                 onClick={() => setSidebarOpen(false)}
                 className={`
-                  flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200
+                  flex items-center space-x-3 px-4 py-4 rounded-xl transition-all duration-300 relative
                   ${
                     isActive(item.path)
-                      ? 'bg-brand-600/20 text-brand-400 border border-brand-600/30'
-                      : 'text-dark-300 hover:bg-dark-700/50 hover:text-dark-50'
+                      ? 'bg-brand-500/10 text-brand-300'
+                      : 'text-dark-400 hover:bg-dark-800/50 hover:text-dark-50'
                   }
                 `}
               >
-                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={getIcon(item.icon)} />
+                {isActive(item.path) && (
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-accent rounded-r-md" />
+                )}
+                <svg className={`w-5 h-5 flex-shrink-0`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={isActive(item.path) ? 2.5 : 2} d={getIcon(item.icon)} />
                 </svg>
-                <span className="text-sm font-medium">{item.name}</span>
+                <span className={`text-base tracking-wide ${isActive(item.path) ? 'font-bold' : 'font-medium'}`}>{item.name}</span>
               </Link>
             ))}
           </div>
