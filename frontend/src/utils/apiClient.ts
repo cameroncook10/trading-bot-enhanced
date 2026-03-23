@@ -82,7 +82,7 @@ class APIClient {
           const error: ApiError = new Error(
             errorData.error || `HTTP ${response.status}`
           );
-          error.statusCode = response.statusCode;
+          error.statusCode = response.status;
           error.details = errorData;
 
           // Don't retry on 4xx client errors (except 429 and 408)
@@ -173,6 +173,37 @@ class APIClient {
    */
   async getMetrics(view: 'summary' | 'health' | 'endpoints' | 'errors' | 'requests' = 'summary'): Promise<MetricsResponse | HealthMetrics> {
     return this.request(`/api/metrics?view=${view}`);
+  }
+
+  /**
+   * Get real positions from backend
+   */
+  async getPositions(): Promise<any[]> {
+    const response = await this.request<{ positions: any[] }>('/api/trading/positions');
+    return response.positions || [];
+  }
+
+  /**
+   * Get trade history from backend
+   */
+  async getTradeHistory(): Promise<any[]> {
+    const response = await this.request<{ trades: any[] }>('/api/trading/history');
+    return response.trades || [];
+  }
+
+  /**
+   * Get portfolio data from backend
+   */
+  async getPortfolio(): Promise<any> {
+    const response = await this.request<{ portfolio: any }>('/api/trading/portfolio');
+    return response.portfolio || {};
+  }
+
+  /**
+   * Get system status
+   */
+  async getStatus(): Promise<any> {
+    return this.request('/api/trading/status');
   }
 
   /**
